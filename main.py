@@ -20,14 +20,15 @@ fer = Fernet(key)
 def view():
   with open('passwords.txt','r') as file:
     for line in file.readlines():
-      user,passwd = line.rstrip().split(" -> ")
-      print("User:",user," -> Password:",str(fer.decrypt(passwd.encode())))
+      data = line.rstrip()
+      user, passwd = data.split("|")
+      print("User:",user," -> Password:",fer.decrypt(passwd.encode()).decode())
 
 def add():
   name = input("Account name: ")
   pwd = input("Password: ")
   with open('passwords.txt','a') as file:
-    file.write(name + " -> "+str(fer.encrypt(pwd.encode())) + "\n")
+    file.write(name + "|"+fer.encrypt(pwd.encode()).decode() + "\n")
 
 while True:
   mode = input("Add new password to the list or view passwords ? (Add or View). Press q to quit.").lower()
